@@ -951,7 +951,7 @@ function saveSession() {
     btn.textContent = editingDate ? "この日の記録を更新" : "本日の記録を保存";
     btn.classList.remove("saved");
   }, 2000);
-
+syncToSheet(record);
   showToast(editingDate ? "更新しました" : "保存しました");
 }
 
@@ -1021,7 +1021,14 @@ function renderHistory() {
     `;
   }).join("");
 }
-
+function syncToSheet(record) {
+  fetch(GAS_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(record)
+  }).catch(err => console.log("Sync error:", err));
+}
 function escapeHtml(s) {
   return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
